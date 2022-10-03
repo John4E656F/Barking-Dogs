@@ -74,7 +74,7 @@ exports.getAllBookmarks = async (req, res) => {
     }
 };
 
-exports.clearAllBookrmarks = async (req, res) => {
+exports.clearAllBookmarks = async (req, res) => {
     try {
         const userId = req.user.id;
         await Bookmark.deleteMany({ userId });

@@ -153,3 +153,83 @@ exports.login = async (req, res, next) => {
 }
 
 //Forget Password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(404).json({
+        msg: "fail",
+        msg: "No user exists with this e-mail"
+      });
+    }
+
+    //Generate reset token
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    // Send it to user's e-mail
+    const resetURL = `${req.protocol}://${req.get(
+      "host"
+    )}/resetPassword/${resetToken}`;
+    await new Email(user).sendPasswordReset(resetURL);
+
+    res.status(200).json({
+      stataus: "success",
+      message: "Token sent to email!"
+    });
+  } catch (err) {
+    console.log(err);
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return res.status(500).json({
+      status: "fail",
+      msg: "There was an error sending the email"
+    });
+  }
+};
+
+// Reset Password
+exports.resetPassword = async (req, res) => {
+  try {
+    //Get user from the reset token
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() }
+    });
+
+    // Token Error
+    if (!user) {
+      return res.status(400).json({
+        status: "fail",
+        msg: "Token is invalid or expired"
+      });
+    }
+    user.password = req.body.password;
+    user.confirmPassword = req.body.confirmPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    const token = signToken(user._id);
+    res.status(201).json({
+      status: "success",
+      token,
+      data: {
+        user
+      }
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({
+      status: "fail",
+      msg: err.message
+    });
+  }
+};
