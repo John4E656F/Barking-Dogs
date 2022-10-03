@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 const {
   signUpUserValidation,
@@ -59,11 +60,11 @@ exports.protect = async (req, res, next) => {
     if (currentUser.changedPasswordAfter(decoded.iat)) {
       return res.status(401).json({
         status: "fail",
-        msg: "The password was chagned. Please log in again"
+        msg: "The password was changed. Please log in again"
       });
     }
 
-    req;user = currentUser;
+    req.user = currentUser;
     next();
   } catch (err) {
     console.log(err.message);
@@ -88,18 +89,27 @@ exports.getUserFromToken = async (req, res) => {
 //Signup
 exports.signup = async (req, res, next) => {
   try {
-    //Validation
-    const { error } = signUpUserValidation(req.body);
-    if (error) return validationError(res, error);
+    const { email, useername, password } = req.body;
 
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+      return res.status(400).json({
+        error: true,
+        message: "Email already exists",
+      })
+    }
+
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const newUser = await User.create({
-      name: req.body.name,
       email: req.body.email,
       username: req.body.username,
-      DOB: req.body.DOB,
-      password: req.body.password,
-      confirmPassword: req.body.confirmPassword
-    });
+      password: hashedPassword,
+    }).then((user) => {
+      return res.status(200).json({
+        message: "Registered Successfully",
+      })
+    })
 
     await new Email(newUser).sendWelcome();
 

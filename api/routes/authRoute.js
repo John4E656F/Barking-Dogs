@@ -1,7 +1,8 @@
-const express = require("express").Router();
+const express = require("express");
+const router = express.Router();
 
 const authController = require("../controllers/authController");
-const router = require("./messageRoute");
+// const router = require("./messageRoute");
 
 router.get("/", authController.protect, authController.getUserFromToken);
 router.post("/signup", authController.signup);

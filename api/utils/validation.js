@@ -2,12 +2,9 @@ const Joi = require("joi");
 
 exports.signUpUserValidation = data => {
     const schema = Joi.object({
-        name: Joi.string().required(),
-        username: Joi.string().required(),
         email: Joi.string().email().required(),
-        DOB: Joi.date().required(),
+        username: Joi.string().required(),
         password: Joi.string().required().min(8),
-        consfirmPassword: Joi.ref("password")
     }).options({ abortEarly: false });
     return schema.validate(data);
 };

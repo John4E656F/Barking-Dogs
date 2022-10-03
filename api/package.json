@@ -5,11 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "server:dev": "nodemon server.js",
+    "server:dev": "nodemon index.js",
     "client": "npm start --prefix client",
-    "client-install": "npm install --prefix client",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "client-install": "npm install --prefix client"
   },
   "author": "John4e656f",
   "license": "ISC",
@@ -21,6 +19,7 @@
     "express": "^4.17.1",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.10.0",
     "mongoose": "^5.12.13",
     "multer": "^1.4.2",
     "nodemailer": "^6.6.1",

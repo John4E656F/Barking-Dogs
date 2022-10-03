@@ -2,13 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto"); //The crypto module provides a way of handling encrypted data.
 
-const userSchema  =new mongoose.Schema(
+const userSchema  = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: [true, "Name is required"],
-            maxLength: 50
-        },
         username: {
             type: String,
             required: [true, "Username is"],
@@ -20,18 +15,13 @@ const userSchema  =new mongoose.Schema(
             unique: true
         },
         bio: {
-            type: String,
+            type: String,                   
             maxLength: 160
         },
         location: {
             type: String,
             maxLength: 30
         },
-        website: {
-            type: String,
-            maxLength: 100
-        },
-        DOB: Date,
         profilePicture: String,
         coverPicture: String,
         password: {
@@ -40,39 +30,15 @@ const userSchema  =new mongoose.Schema(
             minlength: 8,
             select: false
         },
-        confirmPassword: {
-            type: String,
-            required: [true, "Please confirm your password"],
-            validate: {
-                validator: (val) => {
-                    return val === this.password;
-                },
-                message: "Passwords do not match"
-            }
-        },
         passwordChangedAt: Date,
         passwordResetToken: String,
         passwordResetExpires: Date
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
-//Encrypt Password
-userSchema.pre("save", async (next) => {
-    if (!this.isModified("password")) return next();
-
-    this.password = await bcrypt.hash(this.password, 12);
-    this.confirmPassword = undefined;
-
-    next();
-});
-
-//Compare Password
-userSchema.methods.correctPassword = async ( confirmPassword, password ) => {
-    return await bcrypt.compare(confirmPassword, password);
-};
 
 //Create Reset Password Token
 userSchema.methods.createPasswordResetToken = () => {

@@ -38,6 +38,7 @@ mongoose.connect(DB, {
     };
 
     io.on("connection", socket => {
+        //when user connect
         console.log("A user connected.");
 
         //take userId and socketId from user
