@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/Home'
 import Register from './views/Register'
 import Login from './views/Login'
-import Navbar from './components/Navbar'
+
 
 
 function App() {
@@ -12,7 +12,6 @@ function App() {
 
       <BrowserRouter>
         <div className='flex w-full' >
-        <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
