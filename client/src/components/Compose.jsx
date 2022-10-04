@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { createPost } from '../api/requests/requests'
-import GifIcon from '@mui/icons-material/Gif';
-import PollIcon from '@mui/icons-material/Poll';
-import AddReactionIcon from '@mui/icons-material/AddReaction';
-import ImageIcon from '@mui/icons-material/Image';
-import Default from '../assets/default.jpg'
+import {
+  Grid,
+  Divider,
+  TextField,
+  Button,
+  Avatar,
+} from '@mui/material'
 
 const Compose = ({ refresh }) => {
 
@@ -33,34 +35,42 @@ const Compose = ({ refresh }) => {
   createPost(newPost, response)
 }
 
-let _ = content.length > 0
-
-const buttonStyle = {
-  backgroundColor: _ ? '#1d9bf0' : '#0E4D77',
-  color: _ ? '#fff' : '#7F7F7F',
-  cursor: _ ? 'pointer' : 'default'
-}
-
   return (
-    <div className='w-full flex py-1 justify-between px-4 border-b border-b-gray-500 pb-2 border-opacity-50' >
-      <img src={user?.photo ? user?.photo : Default} className='rounded-full !w-[48px] !h-[48px] pt-1 mr-3 ' alt="" />
-      <div className='pt-1 flex flex-col items-center w-full' >
-          <input id='content' onInput={e => setContent(e.target.value)} type="text" className='w-full outline-none h-[52px] bg-transparent placeholder-gray-600 text-xl' placeholder="What's on your mind?" />
-          <div className='flex items-center justify-between w-full' >
-              <div className='flex mt-3 gap-2' >
-                  <ImageIcon width='25'/>
-                  <GifIcon width='25'/>
-                  <PollIcon width='25'/>
-                  <AddReactionIcon width='25'/>
-              </div>
-              <div onClick={post}
-                  style={buttonStyle}
-                  className='w-20 h-[34px] rounded-3xl flex select-none items-center justify-center mt-3' >
-                  <span className='' >Bark</span>
-              </div>
-          </div>
-      </div>
-    </div>
+    <Grid container sx={{ 
+      borderRadius: 3, 
+      paddingTop: 2,
+      backgroundColor: '#929292',
+      display: 'flex', 
+      paddingX: 2,
+      }}>
+      <Grid container sx={{ display: 'flex', alignItems: 'center', height: '60%', }}>
+          <Grid item sx={{ paddingLeft: 2 }}>
+              <Avatar 
+              alt="alt here" 
+
+              sx={{ width: 50, height: 50 }} 
+              />
+          </Grid>
+          <Grid item xs={11} sx={{ paddingLeft: 2, marginBottom: 1 }}>
+              <TextField
+                  required
+                  name="compose"
+                  id="content"
+                  placeholder="What's on your mind?"
+                  multiline= {true}
+                  fullWidth
+                  size= "small"
+                  rows={3}
+                  type="text"
+                  onInput={e => setContent(e.target.value)}
+              />
+          </Grid>
+      </Grid>
+      <Divider variant="middle" flexItem />
+      <Grid item sx={{ paddingBottom: 2, marginLeft: "auto"}}>
+          <Button  size='medium' onClick={post} variant="contained" sx={{ marginRight: 1.1}}>Post</Button>
+      </Grid>
+    </Grid>
   )
 }
 
