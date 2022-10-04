@@ -14,7 +14,9 @@ import UsersBox from '../components/suggestions/UsersBox'
 import Compose from '../components/Compose'
 import Feed from '../components/Feed'
 import Loading from '../components/Loading'
-
+import '../utils/axios'
+import '../assets/index.css'
+import '../assets/tailwind.css'
 
 function Home() {
 

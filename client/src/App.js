@@ -5,7 +5,9 @@ import Home from './views/Home'
 import Register from './views/Register'
 import Login from './views/Login'
 import Navbar from './components/Navbar'
-
+import './utils/axios'
+import './assets/index.css'
+import './assets/tailwind.css'
 
 function App() {
   return(
