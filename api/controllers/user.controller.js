@@ -21,7 +21,7 @@ export const login = async (req, res) => {
             return res.status(400).send("Bad field")  
         
         const user = await User.findOne({ email }).select("+password")
-        console.log(user)
+
         if (!user) {
             return res.status(400).json({
                 error: true,
@@ -32,8 +32,16 @@ export const login = async (req, res) => {
 
         if (checkPassword) {
             const tokenCreated = jwt.sign({ id: user.id, username: user.username, password: user.password }, process.env.secretKey, { expiresIn: '24h' });
-            return res.status(200).json({
-                token: tokenCreated,
+            return res.send({
+                username: user.username,
+                name: user.name,
+                id: user.id,
+                photo: user.photo,
+                banner: user.banner,
+                description: user.description,
+                followers: user.followers,
+                following: user.following,
+                token: tokenCreated
             })
         } else {
             res.status(400).json({

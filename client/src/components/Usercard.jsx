@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom';
 import {
     Grid,
@@ -9,6 +10,10 @@ import {
 } from '@mui/material'
 
 const Usercard = () => {
+
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    
 
     return (
         <Grid container sx={{
