@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const barkSchema= new mongoose.Schema(
     {
         userId: {

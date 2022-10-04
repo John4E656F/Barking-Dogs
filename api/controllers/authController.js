@@ -13,8 +13,8 @@ const Email = require("../utils/email");
 const StripQuotes = require("concurrently/src/command-parser/strip-quotes");
 
 const signToken = id => {
-  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN
+  const token = jwt.sign({ id }, process.env.JWT_KEY, {
+    expiresIn: '360000s'
   });
   return token;
 };
@@ -45,7 +45,7 @@ exports.protect = async (req, res, next) => {
     }
 
     //Verification of token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
 
     //Check if user still exist
     const currentUser = await User.findById(decoded.id);
@@ -89,7 +89,7 @@ exports.getUserFromToken = async (req, res) => {
 //Signup
 exports.signup = async (req, res, next) => {
   try {
-    const { email, useername, password } = req.body;
+    const { email, username, password } = req.body;
 
     const user = await User.findOne({ email: email });
 
@@ -122,7 +122,7 @@ exports.signup = async (req, res, next) => {
       }
     })
   } catch (err) {
-    res.status(400).json({
+    return res.status(400).json({
       status: "fail",
       msg: err.message
     });
@@ -132,35 +132,46 @@ exports.signup = async (req, res, next) => {
 //Login
 exports.login = async (req, res, next) => {
   try {
-    //Validation
-    const { error } = loginUserValidation(req.body);
-    if (error) return validationError(res, error);
-
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    
     //Confirm email and password
     const user = await User.findOne({ email }).select("+password");
 
-    if (!user || !(await user.correctPassword(password, user.password))) {
-      return res.status(401).json({
-        status: "fail",
-        msg: "Incorrect email or password"
+    if (!user) {
+      res.status(400).json({
+        error: true,
+        message: "Sorry, we can't find an account with this email address. Please try again, later."
       });
+      return;
     }
-    const token = signToken(user._id);
-    res.status(200).json({
-      status: "success",
-      token,
-      data: {
-        user
-      }
-    });
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+
+    if (checkPassword) {
+      const accessToken = signToken(user._id);
+      res.status(200).json({
+        status: "success",
+        token: accessToken,
+        data: {
+          user
+        }
+      });
+    } else {
+      res.status(400).json({
+        error: true,
+        success: false,
+        message: "Incorrect password. Please try again",
+      });
+      return;
+    }
   } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      msg: err.message
-    })
+  res.status(400).json({
+    error: true,
+    success: false,
+    message: "Something went wrong " + err,
+    });
   }
-}
+};
 
 //Forget Password
 exports.forgotPassword = async (req, res) => {
