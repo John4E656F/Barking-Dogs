@@ -195,14 +195,14 @@ exports.forgotPassword = async (req, res) => {
     await new Email(user).sendPasswordReset(resetURL);
 
     res.status(200).json({
-      stataus: "success",
+      status: "success",
       message: "Token sent to email!"
     });
   } catch (err) {
     console.log(err);
-    user.passwordResetToken = undefined;
-    user.passwordResetExpires = undefined;
-    await user.save({ validateBeforeSave: false });
+    User.passwordResetToken = undefined;
+    User.passwordResetExpires = undefined;
+    await User.save({ validateBeforeSave: false });
 
     return res.status(500).json({
       status: "fail",

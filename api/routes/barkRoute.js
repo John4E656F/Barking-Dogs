@@ -10,7 +10,7 @@ const { upload } =require("../utils/upload");
 const { route } = require("./userRoute");
 
 //For Logged-in users
-router.use(authController.protect);
+// router.use(authController.protect);
 
 router
     .route("/")

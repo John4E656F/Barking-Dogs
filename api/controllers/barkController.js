@@ -47,7 +47,7 @@ exports.createBark = async (req, res) => {
     try {
         const user = req.user;
         //Get Cloudinary Link for Media
-        const mediaLink = await cloudinaryLink(req.file.path);
+        // const mediaLink = await cloudinaryLink(req.file.path);
         let bark = await Bark.create({
             userId: user._id,
             text: req.body.text,
