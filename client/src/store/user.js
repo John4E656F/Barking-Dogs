@@ -34,6 +34,7 @@ export const user = createSlice({
       state.email = action.payload.email
       state.username = action.payload.username
       state.password = action.payload.password
+      state.photo = action.payload.photo
     },
     updateUser: (state, action) => {
       state.photo = action.payload.photo ?? state.photo

@@ -22,7 +22,7 @@ import {
   Typography,
 } from '@mui/material'
 
-function Feed({ id, username, content, timestamp, likes, image }) {
+function Feed({ id,  content, timestamp, likes, image }) {
 
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
@@ -35,7 +35,7 @@ function Feed({ id, username, content, timestamp, likes, image }) {
     }
     // console.log(username)
     const userManager = async () => {
-        const data = await getUser({ id, username })
+        const data = await getUser({ id })
         if (data) {
             setUser(data)
             followersCallback(data.followers)
@@ -81,9 +81,12 @@ function Feed({ id, username, content, timestamp, likes, image }) {
             </Button>
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', width: 'fit', height: '100%', margin: '0 auto'}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: 'fit', height: '100%', margin: '0 auto'}}>
           <Typography>{content}</Typography>
-          <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
+          {/* {image
+          ? <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
+          : null
+          } */}
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-Around' }}>

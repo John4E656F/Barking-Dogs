@@ -28,7 +28,6 @@ function Home() {
     console.log('Refreshing')
     getHome(setPosts, setLoading)
   }
-  // console.log(posts)
 
   useEffect(() => {
     if (!user.token) navigate("/login")

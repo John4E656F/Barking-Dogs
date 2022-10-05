@@ -27,7 +27,7 @@ const Compose = ({ refresh }) => {
   const [show, setShow] = useState(false);
 
   const user = useSelector(state => state.user)
-
+  // console.log(user)
   // const handleImage = (e) => {
   //   const file = e.target.files[0]
   //   const reader = new FileReader();
@@ -88,6 +88,7 @@ const Compose = ({ refresh }) => {
       }}>
         <Box sx={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
           <Avatar 
+          src={user.photo}
           alt="alt here"
           sx={{ width: 48, height: 48 }} 
           />
