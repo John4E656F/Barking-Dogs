@@ -2,14 +2,22 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { createPost } from '../api/requests/requests'
 import { storage } from "../Firebase/Firebase";
+import InputEmoji from "react-input-emoji";
 import {
+  Container,
+  Box,
   Grid,
   Divider,
   TextField,
   Button,
   Avatar,
 } from '@mui/material'
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import SentimentSatisfiedAltOutlinedIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import GifOutlinedIcon from '@mui/icons-material/GifOutlined';
+import PollOutlinedIcon from '@mui/icons-material/PollOutlined';
+import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 
 const Compose = ({ refresh }) => {
 
@@ -20,35 +28,35 @@ const Compose = ({ refresh }) => {
 
   const user = useSelector(state => state.user)
 
-  const handleImage = (e) => {
-    const file = e.target.files[0]
-    const reader = new FileReader();
-    if (file) {
-      reader.readAsDataURL(file);
-      setImage(file);
-    }
-    reader.onload = (eventResult) => {
-      setImage(eventResult.target.result);
-    }
-    // setShow(true);
-  }
-
+  // const handleImage = (e) => {
+  //   const file = e.target.files[0]
+  //   const reader = new FileReader();
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //     setImage(file);
+  //   }
+  //   reader.onload = (eventResult) => {
+  //     setImage(eventResult.target.result);
+  //   }
+  //   // setShow(true);
+  // }
+  // console.log(content)
   const post = () => {
     if (!content || content.length < 3) return;
-
-    const uploadTask = storage.ref(`/images/${image.name}`).put(image);
-    //initiates the firebase side uploading
-    uploadTask.on(
-      "state_changed",
-      (snapShot) => {
-        const ps = Math.round(
-          (snapShot.bytesTransferred / snapShot.totalBytes) * 100
-        );
-        setProgress(ps);
-      }, (error) => {
-        console.log(error);
-      } //CONTINUE HERE
-    )
+    console.log(content)
+    // const uploadTask = storage.ref(`/images/${image.name}`).put(image);
+    // //initiates the firebase side uploading
+    // uploadTask.on(
+    //   "state_changed",
+    //   (snapShot) => {
+    //     const ps = Math.round(
+    //       (snapShot.bytesTransferred / snapShot.totalBytes) * 100
+    //     );
+    //     setProgress(ps);
+    //   }, (error) => {
+    //     console.log(error);
+    //   } //CONTINUE HERE
+    // )
 
     const newPost = {
       data: {
@@ -60,55 +68,72 @@ const Compose = ({ refresh }) => {
     }
 
     const response = (data) => {
-      document.getElementById("content").value = ""
+      // document.getElementById("content").value = ""
       setContent("")
-      if (data == 'OK') return refresh()
+      if (data === 'OK') return refresh()
   }
 
   createPost(newPost, response)
 }
 
   return (
-    <Grid container sx={{ 
-      borderRadius: 3, 
-      paddingTop: 2,
-      backgroundColor: '#929292',
-      display: 'flex', 
-      paddingX: 2,
+    <Container sx={{ 
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      color: '#fff',
+      margin: '25px 0',
+      padding: '0 20px',
       }}>
-      <Grid container sx={{ display: 'flex', alignItems: 'center', height: '60%', }}>
-          <Grid item sx={{ paddingLeft: 2 }}>
-              <Avatar 
-              alt="alt here" 
-
-              sx={{ width: 50, height: 50 }} 
-              />
-          </Grid>
-          <Grid item xs={11} sx={{ paddingLeft: 2, marginBottom: 1 }}>
-              <TextField
-                  required
-                  name="compose"
-                  id="content"
-                  placeholder="What's on your mind?"
-                  multiline= {true}
-                  fullWidth
-                  size= "small"
-                  rows={3}
-                  type="text"
-                  onInput={e => setContent(e.target.value)}
-              />
-          </Grid>
-      </Grid>
-      <Divider variant="middle" flexItem />
-      <Grid item sx={{ paddingBottom: 2, marginLeft: "auto"}}>
-      <Button variant="contained" component="label">
-        <FileUploadIcon />
-        <input hidden accept="image/*" multiple type="file" />
-      </Button>
-        
-          <Button  size='medium' onClick={post} variant="contained" sx={{ marginRight: 1.1}}>Post</Button>
-      </Grid>
-    </Grid>
+        <Box sx={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
+          <Avatar 
+          alt="alt here"
+          sx={{ width: 48, height: 48 }} 
+          />
+          <InputEmoji
+            required
+            value={content}
+            onChange={setContent}
+            id="content"
+            placeholder="What's on your mind?"
+            onInput={e => setContent(e.target.value)}
+            sx={{ 
+              width: '100%',
+              background: 'none',
+              border: 'none',
+              color: '#fff',
+              outline: 'none',
+              fontFamily: 'Montserrat',
+              fontWeight: 'bold',
+              borderBottom: '1px solid rgb(75, 75, 75)'
+            }}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '15px', paddingLeft: '3.7rem'}}>
+          <label htmlFor="media" sx={{display: 'none'}}>
+            <input hidden accept="image/*" multiple type="file" />
+            <InsertPhotoIcon/>
+          </label>
+          <div onClick={() => setShow(true)}>
+            <SentimentSatisfiedAltOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          </div>
+          <GifOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <PollOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <PendingActionsOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <LocationOnOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <Button onClick={post} sx={{
+            marginLeft: 'auto',
+            backgroundColor: '#1da1f2',
+            padding: '10px 15px',
+            borderRadius: '30px',
+            fontFamily: 'Montserrat',
+            fontWeight: 'bold',
+            color: '#fff'
+          }}>
+            Post
+          </Button>
+        </Box>
+    </Container>
   )
 }
 

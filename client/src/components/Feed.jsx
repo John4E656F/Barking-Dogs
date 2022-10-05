@@ -4,17 +4,25 @@ import { useNavigate, Link } from 'react-router-dom'
 // import FollowButton from './FollowButton'
 import { useSelector } from 'react-redux'
 import { getUser } from '../api/requests/requests'
-
+import Moment from "react-moment";
 import Default from '../assets/default.jpg'
+import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import ReplyIcon from '@mui/icons-material/Reply';
+import RepeatIcon from '@mui/icons-material/Repeat';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShareIcon from '@mui/icons-material/Share';
 
 import {
+  Container,
+  Box,
+  Button,
   Grid,
   Avatar,
   Typography,
 } from '@mui/material'
-import { display } from '@mui/system'
 
-function Feed({ id, content, date }) {
+function Feed({ id, username, content, timestamp, likes, image }) {
 
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
@@ -27,7 +35,7 @@ function Feed({ id, content, date }) {
     }
 
     const userManager = async () => {
-        const data = await getUser({ id })
+        const data = await getUser({ id, username })
         if (data) {
             setUser(data)
             followersCallback(data.followers)
@@ -46,33 +54,53 @@ function Feed({ id, content, date }) {
     if (!user) return;
 
     return (
-      <Grid container sx={{ 
-        borderRadius: 3, 
-        marginTop: 2,
-        paddingY: 2,
-        paddingX: 2,
-        backgroundColor: '#929292',
+      <Container sx={{ 
+        borderTop: '1px solid rgb(60, 60, 60)',
+        padding: '15px',
         display: 'flex', 
-        flexDirection: 'row'
+        flexDirection: 'column',
+        gap: '20px'
         }}>
-        <Grid item>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px'}}>
           <Avatar 
             alt={user?.photo ? user?.photo : Default}
             onClick={goPage}
-            sx={{ width: 50, height: 50 }} 
+            sx={{ width: '48px', height: '48px', cursor: 'pointer' }} 
             />
-        </Grid>
-        <Grid container xs={11} sx={{ paddingLeft: 2, alignContent: 'center', display:'block',}}>
-          <Grid item sx={{ paddingBottom:1, display: 'flex', flexDirection: 'row', gap:1, }}>
-            <Typography>{user.username}</Typography>
-            <Typography>@{user.username}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography>{content}</Typography>
-          </Grid>
-
-        </Grid>
-      </Grid>
+            <div style={{display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
+                <Typography sx={{fontSize: '15px', textTransform: 'lowercase'}}>@{user.username}</Typography> -{" "}
+                <Moment fromNow>{timestamp?.toDate()}</Moment>
+              </span>
+              <Typography sx={{ fontSize: '14xp', marginTop: '5px', fontWeight: '400px'}}> title </Typography>
+            </div>
+            <Button sx={{ marginLeft: 'auto' }}>
+              <MoreHorizOutlinedIcon />
+            </Button>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', width: 'fit', height: '100%', margin: '0 auto'}}>
+          <Typography>{content}</Typography>
+          <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-Around' }}>
+          <ReplyIcon sx={{ cursor: 'pointer', fontSize: '25px', color: '#afafaf' }}/>
+          <RepeatIcon sx={{ cursor: 'pointer', fontSize: '25px', color: '#afafaf' }}/>
+          {likes ? (
+            <span>
+              {" "}
+              <FavoriteIcon/>
+            </span>
+          ) : (
+            <span>
+              <FavoriteBorderIcon />
+            </span>
+          )} 
+          <ShareIcon />
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          {likes && <span style={{marginLeft: '10rem'}}>{likes.length}</span>}
+        </Box>
+      </Container>
     )
 }
 
