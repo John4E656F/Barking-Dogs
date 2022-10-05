@@ -6,12 +6,15 @@ import { getHome } from '../api/requests/requests'
 
 import {
   Grid,
+  Container,
 } from '@mui/material'
 
 import Navbar from '../components/Navbar'
-import Usercard from '../components/Usercard'
+// import Usercard from '../components/Usercard'
 import Compose from '../components/Compose'
 import Feed from '../components/Feed'
+import Loading from '../components/Loading'
+
 
 function Home() {
 
@@ -25,29 +28,34 @@ function Home() {
     getHome(setPosts, setLoading)
   }
 
-  // useEffect(() => {
-  //   if (!user.token) return navigate("/login")
-  //   refresh()
-  // }, [user])
+  useEffect(() => {
+    if (!user.token) return navigate("/login")
+    refresh()
+  }, [user])
 
-  // if (!user.token) return;
+  if (!user.token) return;
 
 
   return (
     <>
       <Navbar />
-      <Grid container> 
-        <Grid item xs={3} sx={{marginTop: 5, display: 'flex', justifyContent: 'center' }}>
-            <Usercard />
-        </Grid>
-        <Grid item xs={6} sx={{marginTop: 5, background: 'green', }}>
+      <Container> 
+        <Grid item sx={{marginTop: 5, }}>
             <Compose refresh={refresh}/>
-            <Feed />
+            {loading ?
+            <Loading /> :
+            posts.map((post, index) => {
+              return (
+                <Feed key={index} id={post.user} content={post.content} date={post.date} />
+              )
+            })
+            }
+            
         </Grid>
-        <Grid item xs={3} sx={{ background: 'blue' }}>
+        <Grid item sx={{ background: 'blue' }}>
 
         </Grid>
-      </Grid>
+      </Container>
     </>
   )
 }

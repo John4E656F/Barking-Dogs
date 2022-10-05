@@ -22,28 +22,28 @@ function Feed({ id, content, date }) {
     const [following, followingCallback] = useState([])
     const currentUser = useSelector(state => state.user)
 
-    // const randomNumber = () => {
-    //     return Math.floor(Math.random() * (10000 - 1500) + 1500);
-    // }
+    const randomNumber = () => {
+        return Math.floor(Math.random() * (10000 - 1500) + 1500);
+    }
 
-    // const userManager = async () => {
-    //     const data = await getUser({ id })
-    //     if (data) {
-    //         setUser(data)
-    //         followersCallback(data.followers)
-    //         followingCallback(data.following)
-    //     }
-    // }
+    const userManager = async () => {
+        const data = await getUser({ id })
+        if (data) {
+            setUser(data)
+            followersCallback(data.followers)
+            followingCallback(data.following)
+        }
+    }
 
-    // useEffect(() => {
-    //     if (user) return
-    //     userManager()
-    // }, [])
+    useEffect(() => {
+        if (user) return
+        userManager()
+    }, [])
 
-    // const goPage = () => {
-    //     navigate(`/${user.username}`)
-    // }
-    // if (!user) return;
+    const goPage = () => {
+        navigate(`/${user.username}`)
+    }
+    if (!user) return;
 
     return (
       <Grid container sx={{ 
@@ -57,17 +57,18 @@ function Feed({ id, content, date }) {
         }}>
         <Grid item>
           <Avatar 
-            alt="alt here" 
+            alt={user?.photo ? user?.photo : Default}
+            onClick={goPage}
             sx={{ width: 50, height: 50 }} 
             />
         </Grid>
         <Grid container xs={11} sx={{ paddingLeft: 2, alignContent: 'center', display:'block',}}>
           <Grid item sx={{ paddingBottom:1, display: 'flex', flexDirection: 'row', gap:1, }}>
-            <Typography>Elon Busk</Typography>
-            <Typography>@elonbusk</Typography>
+            <Typography>{user.username}</Typography>
+            <Typography>@{user.username}</Typography>
           </Grid>
           <Grid item>
-            <Typography>text hefe</Typography>
+            <Typography>{content}</Typography>
           </Grid>
 
         </Grid>

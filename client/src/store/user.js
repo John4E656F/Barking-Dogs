@@ -30,6 +30,11 @@ export const user = createSlice({
       }
       localStorage.setItem("token", action.payload.token)
     },
+    register: (state, action) => {
+      state.email = action.payload.email
+      state.username = action.payload.username
+      state.password = action.payload.password
+    },
     updateUser: (state, action) => {
       state.photo = action.payload.photo ?? state.photo
       state.banner = action.payload.banner ?? state.banner
@@ -41,6 +46,6 @@ export const user = createSlice({
   }
 })
 
-export const { login, updateUser } = user.actions
+export const { login, register, updateUser } = user.actions
 
 export default user.reducer
