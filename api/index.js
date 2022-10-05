@@ -15,7 +15,7 @@ app.use("/images", express.static('images'));
 app.use(routes)
 
 mongoose
-    .connect(process.env.mongodb || 'mongodb database link.', {
+    .connect(process.env.URL|| 'mongodb database link.', {
         useNewUrlParser: true,
         useUnifiedTopology: true
     })

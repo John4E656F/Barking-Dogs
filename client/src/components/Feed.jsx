@@ -33,7 +33,7 @@ function Feed({ id, username, content, timestamp, likes, image }) {
     const randomNumber = () => {
         return Math.floor(Math.random() * (10000 - 1500) + 1500);
     }
-
+    // console.log(username)
     const userManager = async () => {
         const data = await getUser({ id, username })
         if (data) {
@@ -48,6 +48,7 @@ function Feed({ id, username, content, timestamp, likes, image }) {
         userManager()
     }, [])
 
+    // console.log(user)
     const goPage = () => {
         navigate(`/${user.username}`)
     }
@@ -61,6 +62,7 @@ function Feed({ id, username, content, timestamp, likes, image }) {
         flexDirection: 'column',
         gap: '20px'
         }}>
+
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px'}}>
           <Avatar 
             alt={user?.photo ? user?.photo : Default}
@@ -78,10 +80,12 @@ function Feed({ id, username, content, timestamp, likes, image }) {
               <MoreHorizOutlinedIcon />
             </Button>
         </Box>
+
         <Box sx={{ display: 'flex', alignItems: 'center', width: 'fit', height: '100%', margin: '0 auto'}}>
           <Typography>{content}</Typography>
           <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
         </Box>
+
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-Around' }}>
           <ReplyIcon sx={{ cursor: 'pointer', fontSize: '25px', color: '#afafaf' }}/>
           <RepeatIcon sx={{ cursor: 'pointer', fontSize: '25px', color: '#afafaf' }}/>
@@ -97,6 +101,7 @@ function Feed({ id, username, content, timestamp, likes, image }) {
           )} 
           <ShareIcon />
         </Box>
+
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           {likes && <span style={{marginLeft: '10rem'}}>{likes.length}</span>}
         </Box>

@@ -57,7 +57,8 @@ const Compose = ({ refresh }) => {
     //     console.log(error);
     //   } //CONTINUE HERE
     // )
-
+    console.log(user.id)
+    console.log(user.username)
     const newPost = {
       data: {
         user: user.id,

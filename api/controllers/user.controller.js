@@ -55,7 +55,7 @@ export const login = async (req, res) => {
         res.status(400).json({
           error: true,
           success: false,
-          message: "Something went wrong" + err,
+          message: "Something went wrong " + err,
         });
     }
 }
@@ -149,7 +149,6 @@ export const getUser = async (req, res) => {
 
     res.send({
         username: user.username,
-        name: user.name,
         photo: user.photo,
         banner: user.banner,
         id: user.id,
