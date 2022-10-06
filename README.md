@@ -1,6 +1,8 @@
-# Barking-Dogs
 <div align="center">
-[![Barking Dogs](https://firebasestorage.googleapis.com/v0/b/bark-5b302.appspot.com/o/Bark%20Logo.png?alt=media&token=9a46d4a8-9c85-4db3-bc37-f3584cbb1deb)](https://barking-dogs.netlify.app/)
+
+# Barking-Dogs
+
+<img src="https://firebasestorage.googleapis.com/v0/b/bark-5b302.appspot.com/o/Bark%20Logo.png?alt=media&token=9a46d4a8-9c85-4db3-bc37-f3584cbb1deb" width="200px;" alt="BarkingDogs"/>
 </div>
 <hr>
 
