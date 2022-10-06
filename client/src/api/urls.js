@@ -3,7 +3,8 @@
 // Get methods
 export const GET_HOME = "/home"
 export const GET_USER = "/user"
-export const GET_POSTS = "/userPost"
+export const GET_USERNAME = "/username"
+export const GET_POSTS = "/userPosts"
 
 // Post methods
 export const CREATE_POST = "/post"

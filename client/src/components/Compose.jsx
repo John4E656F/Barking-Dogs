@@ -28,22 +28,22 @@ const Compose = ({ refresh }) => {
 
   const user = useSelector(state => state.user)
   // console.log(user)
-  // const handleImage = (e) => {
-  //   const file = e.target.files[0]
-  //   const reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     setImage(file);
-  //   }
-  //   reader.onload = (eventResult) => {
-  //     setImage(eventResult.target.result);
-  //   }
-  //   // setShow(true);
-  // }
+  const handleImage = (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      setImage(file);
+    }
+    reader.onload = (eventResult) => {
+      setImage(eventResult.target.result);
+    }
+    // setShow(true);
+  }
   // console.log(content)
   const post = () => {
     if (!content || content.length < 3) return;
-    console.log(content)
+
     // const uploadTask = storage.ref(`/images/${image.name}`).put(image);
     // //initiates the firebase side uploading
     // uploadTask.on(
@@ -57,8 +57,6 @@ const Compose = ({ refresh }) => {
     //     console.log(error);
     //   } //CONTINUE HERE
     // )
-    console.log(user.id)
-    console.log(user.username)
     const newPost = {
       data: {
         user: user.id,
@@ -69,7 +67,7 @@ const Compose = ({ refresh }) => {
     }
 
     const response = (data) => {
-      // document.getElementById("content").value = ""
+
       setContent("")
       if (data === 'OK') return refresh()
   }
@@ -121,7 +119,7 @@ const Compose = ({ refresh }) => {
           </div>
           <GifOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <PollOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
-          <PendingActionsOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <InsertPhotoIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <LocationOnOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <Button onClick={post} sx={{
             marginLeft: 'auto',

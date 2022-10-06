@@ -8,9 +8,17 @@ dontenv.config()
 const port = process.env.PORT || 3030
 const app = express()
 
+// const corsOptions ={
+//     origin:'*', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     optionSuccessStatus:200,
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+
+// }
+
 app.use(cors());
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use("/images", express.static('images'));
 app.use(routes)
 
@@ -19,7 +27,7 @@ mongoose
         useNewUrlParser: true,
         useUnifiedTopology: true
     })
-    .then(console.log("MongoDB Conneted.."));
+    .then(console.log("MongoDB Connected.."));
 
 app.listen(port, () => {
     console.log(`Server Listen On ${port}  `)

@@ -99,7 +99,7 @@ export const register = async (req, res) => {
         id: createUID,
         description: '',
         photo: photo,
-        banner: null,
+        banner: "",
         followers: [],
         following: [],
         token: tokenCreated
@@ -158,14 +158,41 @@ export const getUser = async (req, res) => {
     
 }
 
+// Get user information with optional query
+export const getUserbyName = async (req, res) => {
+    try {
+        const { username } = req.query
+        if (!username ) return res.status(406).send("Misuse")     
+        // var search = id ? { id } : { username }      
+        const user = await User.findOne({username: username})
+        if (!user) return res.status(404).send("Not found.")        
+        res.send({
+            username: user.username,
+            photo: user.photo,
+            banner: user.banner,
+            id: user.id,
+            description: user.description,
+            followers: user.followers,
+            following: user.following
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ status: "error", msg: error.message });
+    }
+    
+}
+
 // Get specific posts
 export const getUserPosts = async (req, res) => {
-    const { user } = req.query
-
-    if (!user) return res.status(406).send("Misuse")
-    const posts = await Post.find({ user: user })
-
-    res.send(posts.reverse())
+    try {
+        const { user } = req.query      
+        if (!user) return res.status(406).send("Misuse")
+        const posts = await Post.find({ user: user })       
+        res.send(posts.reverse())
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ status: "error", msg: error.message });
+    }
 }
 
 // Create a post

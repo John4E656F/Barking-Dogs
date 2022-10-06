@@ -22,7 +22,7 @@ import {
   Typography,
 } from '@mui/material'
 
-function Feed({ id,  content, timestamp, likes, image }) {
+function Feed({ id,  content, date, likes, image }) {
 
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
@@ -33,7 +33,7 @@ function Feed({ id,  content, timestamp, likes, image }) {
     const randomNumber = () => {
         return Math.floor(Math.random() * (10000 - 1500) + 1500);
     }
-    // console.log(username)
+    // console.log(user.photo)
     const userManager = async () => {
         const data = await getUser({ id })
         if (data) {
@@ -42,7 +42,6 @@ function Feed({ id,  content, timestamp, likes, image }) {
             followingCallback(data.following)
         }
     }
-
     useEffect(() => {
         if (user) return
         userManager()
@@ -65,16 +64,19 @@ function Feed({ id,  content, timestamp, likes, image }) {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px'}}>
           <Avatar 
-            alt={user?.photo ? user?.photo : Default}
-            onClick={goPage}
+            alt={user.photo}
+            src={user.photo}
+            onClick={() => {
+              navigate(`/${user.username}`)
+            }}
             sx={{ width: '48px', height: '48px', cursor: 'pointer' }} 
             />
             <div style={{display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
                 <Typography sx={{fontSize: '15px', textTransform: 'lowercase'}}>@{user.username}</Typography> -{" "}
-                <Moment fromNow>{timestamp?.toDate()}</Moment>
+                <Moment fromNow>{date?.toDate()}</Moment>
               </span>
-              <Typography sx={{ fontSize: '14xp', marginTop: '5px', fontWeight: '400px'}}> title </Typography>
+              {/* <Typography sx={{ fontSize: '14xp', marginTop: '5px', fontWeight: '400px'}}> title </Typography> */}
             </div>
             <Button sx={{ marginLeft: 'auto' }}>
               <MoreHorizOutlinedIcon />

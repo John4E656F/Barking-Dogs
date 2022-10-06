@@ -25,7 +25,6 @@ function Home() {
   const navigate = useNavigate()
 
   const refresh = () => {
-    console.log('Refreshing')
     getHome(setPosts, setLoading)
   }
 
@@ -47,7 +46,7 @@ function Home() {
             <Loading /> :
             posts.map((post, index) => {
               return (
-                <Feed key={index} username={post.user} id={post.user} content={post.content} date={post.date} />
+                <Feed key={index} id={post.user} content={post.content} date={post.date} />
               )
             })
             }

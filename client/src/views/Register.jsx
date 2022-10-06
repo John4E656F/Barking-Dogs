@@ -147,7 +147,6 @@ async function formSubmitHandler(event)  {
   
    // When a post request is sent to the create url, we'll add a new record to the database.
 
-   console.log(imageURL)
   if (!form.email.valid || !form.password.valid) {
       setForm((prevForm) => ({ ...prevForm, onSubmitInvalid: true }));
   } else {
@@ -157,9 +156,10 @@ async function formSubmitHandler(event)  {
       uploadBytes(imageRef, imageUpload).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
           setImageURL(url)
-          // setImageUrls((prev) => [...prev, url]);
+          console.log('Image URL: ' + url)
         });
       })
+      
       const newUser = {
           "email" : form.email.value, 
           "username" : form.username.value, 
