@@ -46,6 +46,6 @@ Such as:
 <td align="center"><a href="https://github.com/John4E656F"><img src="https://avatars.githubusercontent.com/u/104214379?v=4" width="100px;" alt=""/><br /><sub><b>John Andres</b></sub></a><br /><a href="https://github.com/John4E656F3" title="Code">💻</a> </td>
 
 
-### Don't Forget to Leave a Like 👍 Star ⭐ 
-### It will take you Two Second
+### Don't Forget to Leave a Follow 👍 &  Star ⭐ 
+### It only takes Two Second to ⭐
 </div>
