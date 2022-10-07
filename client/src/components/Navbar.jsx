@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { useSelector } from "react-redux";
+import { useNavigate, Link } from 'react-router-dom'
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
+import {AppBar, Avatar} from '@mui/material/';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -58,6 +60,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const user = useSelector(state => state.user)
+  const navigate = useNavigate()
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -74,6 +78,9 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+  const goPage = () => {
+    navigate(`/${user.username}`)
+  }
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -96,7 +103,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={goPage}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -157,14 +164,10 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            Barking Dogs
-          </Typography>
+   
+            <Link to="/Home" variant="body2">
+              <img style={{ width: '120px', height: '120px',  }} src="https://firebasestorage.googleapis.com/v0/b/bark-5b302.appspot.com/o/Bark%20Logo.png?alt=media&token=9a46d4a8-9c85-4db3-bc37-f3584cbb1deb" />
+            </Link>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -175,8 +178,8 @@ export default function PrimarySearchAppBar() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, }}>
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -189,7 +192,7 @@ export default function PrimarySearchAppBar() {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               edge="end"
@@ -198,8 +201,11 @@ export default function PrimarySearchAppBar() {
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
-            >
-              <AccountCircle />
+            > <Avatar 
+            src={user.photo}
+            alt="alt here"
+            sx={{ width: 40, height: 40 }} 
+            />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

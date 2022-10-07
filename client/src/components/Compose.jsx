@@ -27,23 +27,23 @@ const Compose = ({ refresh }) => {
   const [show, setShow] = useState(false);
 
   const user = useSelector(state => state.user)
-
-  // const handleImage = (e) => {
-  //   const file = e.target.files[0]
-  //   const reader = new FileReader();
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //     setImage(file);
-  //   }
-  //   reader.onload = (eventResult) => {
-  //     setImage(eventResult.target.result);
-  //   }
-  //   // setShow(true);
-  // }
+  // console.log(user)
+  const handleImage = (e) => {
+    const file = e.target.files[0]
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+      setImage(file);
+    }
+    reader.onload = (eventResult) => {
+      setImage(eventResult.target.result);
+    }
+    // setShow(true);
+  }
   // console.log(content)
   const post = () => {
     if (!content || content.length < 3) return;
-    console.log(content)
+
     // const uploadTask = storage.ref(`/images/${image.name}`).put(image);
     // //initiates the firebase side uploading
     // uploadTask.on(
@@ -57,8 +57,6 @@ const Compose = ({ refresh }) => {
     //     console.log(error);
     //   } //CONTINUE HERE
     // )
-    console.log(user.id)
-    console.log(user.username)
     const newPost = {
       data: {
         user: user.id,
@@ -69,7 +67,7 @@ const Compose = ({ refresh }) => {
     }
 
     const response = (data) => {
-      // document.getElementById("content").value = ""
+
       setContent("")
       if (data === 'OK') return refresh()
   }
@@ -88,6 +86,7 @@ const Compose = ({ refresh }) => {
       }}>
         <Box sx={{ display: 'flex', alignContent: 'center', gap: '1rem' }}>
           <Avatar 
+          src={user.photo}
           alt="alt here"
           sx={{ width: 48, height: 48 }} 
           />
@@ -120,7 +119,7 @@ const Compose = ({ refresh }) => {
           </div>
           <GifOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <PollOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
-          <PendingActionsOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
+          <InsertPhotoIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <LocationOnOutlinedIcon sx={{ color: '#1da1f2', cursor: 'pointer' }}/>
           <Button onClick={post} sx={{
             marginLeft: 'auto',

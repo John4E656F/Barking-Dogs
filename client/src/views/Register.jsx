@@ -4,17 +4,33 @@ import { Link, useNavigate } from 'react-router-dom'
 import { login } from '../store/user'
 import { registerUser } from '../api/requests/requests'
 import { validateEmail } from '../utils/emailValidation'
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+
 
 import {
-    Container,
+  Container,
   Grid,
   Typography,
   Box,
   TextField,
   Button,
+
 } from '@mui/material'
 
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+import storage from "../Firebase/Firebase";
+
+const imageMimeType = /image\/(png|jpg|jpeg|gif)/i;
+
 const Register = () => {
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imageURL, setImageURL] = useState("");
+  const [uploadURL, setUploadURL] = useState(null);
+  
   const user = useSelector(state => state.user)
   const [form, setForm] = useState({
     email: {
@@ -32,11 +48,7 @@ const Register = () => {
         touched: false,
         valid: false,
     },
-    repeatPassword: {
-        value: "",
-        touched: false,
-        valid: false,
-    },
+
 
     onSubmitInvalid: false,
 });
@@ -47,6 +59,28 @@ const dispatch = useDispatch();
 useEffect(() => {
   if (user.token) return navigate("/home");
 }, [user])
+
+useEffect(() => {
+  let fileReader, isCancel = false;
+  if (imageUpload) {
+    fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const { result } = e.target;
+      if (result && !isCancel) {
+        setUploadURL(result)
+        
+      }
+    }
+    fileReader.readAsDataURL(imageUpload);
+  }
+  return () => {
+    isCancel = true;
+    if (fileReader && fileReader.readyState === 1) {
+      fileReader.abort();
+    }
+  }
+}, [imageUpload])
+
 
 const inputChangeHandler = (event) => {
     const { name, value } = event.target;
@@ -85,24 +119,13 @@ const inputChangeHandler = (event) => {
                 },
             }));
             break;
-
-        case "repeatPassword":
-            setForm((prevForm) => ({
-                ...prevForm,
-                 repeatPassword: {
-                    ...prevForm.repeatPassword,
-                    value: value,
-                    touched: true,
-                    valid: value === form.password.value,
-                 },
-            }));
-            break;
+            
         default:
             break;
     }
 };
 
-let [usernameSpan, emailSpan, passwordSpan, repeatPasswordSpan] = [null, null, null, null, null];
+let [usernameSpan, emailSpan, passwordSpan, ] = [null, null, null, null, null];
 
 if ((!form.username.valid && form.username.touched) || (form.onSubmitInvalid && !form.username.valid)) {
     usernameSpan = <span> Please enter a valid username</span>
@@ -116,36 +139,41 @@ if ((!form.password.valid && form.password.touched) || (form.onSubmitInvalid && 
 passwordSpan = <span>Your password must contain between 4 and 60 characters.</span>;
 }
 
-if (
-    (!form.repeatPassword.valid && form.repeatPassword.touched) ||
-    (form.onSubmitInvalid && !form.repeatPassword.valid)
-) {
-    repeatPasswordSpan = <span>The repeated password must match the password.</span>
-}
 
  // This function will handle the submission.
 async function formSubmitHandler(event)  {
 
-    event.preventDefault();
-    
-     // When a post request is sent to the create url, we'll add a new record to the database.
-    
-    if (!form.email.valid || !form.password.valid) {
-        setForm((prevForm) => ({ ...prevForm, onSubmitInvalid: true }));
-    } else {
-        // TODO: handle the data submission
-        const newUser = {
-            "email" : form.email.value, 
-            "username" : form.username.value, 
-            "password" : form.password.value
-        };
-        const response = (data) => {
-          dispatch(login(data))
-          navigate("/home")
-      }
-      registerUser(newUser, response)
-    };
-  }
+  event.preventDefault();
+  
+   // When a post request is sent to the create url, we'll add a new record to the database.
+
+  if (!form.email.valid || !form.password.valid) {
+      setForm((prevForm) => ({ ...prevForm, onSubmitInvalid: true }));
+  } else {
+      // TODO: handle the data submission
+      if (imageUpload == null) return;
+      const imageRef = ref(storage, `images/profile/${form.username.value}`);
+      uploadBytes(imageRef, imageUpload).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          setImageURL(url)
+          console.log('Image URL: ' + url)
+        });
+      })
+      
+      const newUser = {
+          "email" : form.email.value, 
+          "username" : form.username.value, 
+          "password" : form.password.value,
+          "photo": imageURL
+      };
+      const response = (data) => {
+        dispatch(login(data))
+        navigate("/home")
+    }
+    registerUser(newUser, response)
+  };
+}
+
 
 
   return (
@@ -160,7 +188,7 @@ async function formSubmitHandler(event)  {
         <Typography component="h1" variant="h5">
             Register
         </Typography>
-        <Box component="form" onSubmit={formSubmitHandler} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={formSubmitHandler} noValidate sx={{ mt: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <TextField
               margin="normal"
               required
@@ -200,6 +228,25 @@ async function formSubmitHandler(event)  {
               onChange={inputChangeHandler}
             />
             {passwordSpan}
+            <Button component="label" sx={{  mt: 3, mb: 2, backgroundColor :'#00CEFB' }}>
+              <input hidden accept="image/*" type="file" 
+              onChange={(event) => { 
+                setImageUpload(null)
+                const file = event.target.files[0]
+                if (!file.type.match(imageMimeType)) {
+                alert("Image is not valid");
+                return;
+                }
+                setImageUpload(file)
+                
+              }}/>
+                <InsertPhotoIcon/>
+                Upload Profile Picture
+            </Button>
+              {uploadURL? 
+              <img src={uploadURL} alt='profile' style={{ borderRadius: '100%', border: '1px solid #252525', objectFit: 'cover', width: '250px', height: '250px' }} />
+              : null
+              }
             <Button
               type="submit"
               fullWidth
@@ -208,7 +255,7 @@ async function formSubmitHandler(event)  {
             >
               Sign Up
             </Button>
-            <Grid container>
+            <Grid container gap= {2}>
               <Grid item xs>
                 <Link to="#" variant="body2">
                   Forgot password?

@@ -22,7 +22,7 @@ import {
   Typography,
 } from '@mui/material'
 
-function Feed({ id, username, content, timestamp, likes, image }) {
+function Feed({ id,  content, date, likes, image }) {
 
     const navigate = useNavigate()
     const [user, setUser] = useState(null)
@@ -33,16 +33,15 @@ function Feed({ id, username, content, timestamp, likes, image }) {
     const randomNumber = () => {
         return Math.floor(Math.random() * (10000 - 1500) + 1500);
     }
-    // console.log(username)
+    // console.log(user.photo)
     const userManager = async () => {
-        const data = await getUser({ id, username })
+        const data = await getUser({ id })
         if (data) {
             setUser(data)
             followersCallback(data.followers)
             followingCallback(data.following)
         }
     }
-
     useEffect(() => {
         if (user) return
         userManager()
@@ -65,25 +64,31 @@ function Feed({ id, username, content, timestamp, likes, image }) {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '20px'}}>
           <Avatar 
-            alt={user?.photo ? user?.photo : Default}
-            onClick={goPage}
+            alt={user.photo}
+            src={user.photo}
+            onClick={() => {
+              navigate(`/${user.username}`)
+            }}
             sx={{ width: '48px', height: '48px', cursor: 'pointer' }} 
             />
             <div style={{display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '15px', fontWeight: '400px'}}>
                 <Typography sx={{fontSize: '15px', textTransform: 'lowercase'}}>@{user.username}</Typography> -{" "}
-                <Moment fromNow>{timestamp?.toDate()}</Moment>
+                <Moment fromNow>{date?.toDate()}</Moment>
               </span>
-              <Typography sx={{ fontSize: '14xp', marginTop: '5px', fontWeight: '400px'}}> title </Typography>
+              {/* <Typography sx={{ fontSize: '14xp', marginTop: '5px', fontWeight: '400px'}}> title </Typography> */}
             </div>
             <Button sx={{ marginLeft: 'auto' }}>
               <MoreHorizOutlinedIcon />
             </Button>
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', width: 'fit', height: '100%', margin: '0 auto'}}>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: 'fit', height: '100%', margin: '0 auto'}}>
           <Typography>{content}</Typography>
-          <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
+          {/* {image
+          ? <img src={image} alt='title' style={{ borderRadius: '10px', border: '1px solid #252525', objectFit: 'cover', width: '100%', height: '100%'}}/>
+          : null
+          } */}
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-Around' }}>

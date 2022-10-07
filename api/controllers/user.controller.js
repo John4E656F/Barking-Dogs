@@ -34,7 +34,6 @@ export const login = async (req, res) => {
             const tokenCreated = jwt.sign({ id: user.id, username: user.username, password: user.password }, process.env.secretKey, { expiresIn: '24h' });
             return res.send({
                 username: user.username,
-                name: user.name,
                 id: user.id,
                 photo: user.photo,
                 banner: user.banner,
@@ -62,7 +61,7 @@ export const login = async (req, res) => {
 
 // Create Account
 export const register = async (req, res) => {
-    const { username, password, email,  } = req.body
+    const { username, password, email, photo  } = req.body
     if (!username || !password || !email ) return res.status(400).send("Bad field")
     const user = await User.findOne({ email: email });
 
@@ -83,7 +82,7 @@ export const register = async (req, res) => {
         email: email,
         date: Date.now().toString(),
         description: '',
-        photo: null,
+        photo: photo,
         banner: null,
         followers: [],
         following: []
@@ -99,8 +98,8 @@ export const register = async (req, res) => {
         email,
         id: createUID,
         description: '',
-        photo: null,
-        banner: null,
+        photo: photo,
+        banner: "",
         followers: [],
         following: [],
         token: tokenCreated
@@ -119,7 +118,6 @@ export const logintoken = async (req, res) => {
 
     res.send({
         username: user.username,
-        name: user.name,
         id: user.id,
         photo: user.photo,
         banner: user.banner,
@@ -138,34 +136,63 @@ export const getHome = async (req, res) => {
 
 // Get user information with optional query
 export const getUser = async (req, res) => {
-    const { id, username } = req.query
-    if (!id && !username) return res.status(406).send("Misuse")
+    try {
+        const { id } = req.query
+        if (!id ) return res.status(406).send("Misuse")     
+        // var search = id ? { id } : { username }      
+        const user = await User.findOne({_id: id})
+        if (!user) return res.status(404).send("Not found.")        
+        res.send({
+            username: user.username,
+            photo: user.photo,
+            banner: user.banner,
+            id: user.id,
+            description: user.description,
+            followers: user.followers,
+            following: user.following
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ status: "error", msg: error.message });
+    }
+    
+}
 
-    var search = id ? { id } : { username }
-
-
-    const user = await User.findOne(search)
-    if (!user) return res.status(404).send("Not found.")
-
-    res.send({
-        username: user.username,
-        photo: user.photo,
-        banner: user.banner,
-        id: user.id,
-        description: user.description,
-        followers: user.followers,
-        following: user.following
-    })
+// Get user information with optional query
+export const getUserbyName = async (req, res) => {
+    try {
+        const { username } = req.query
+        if (!username ) return res.status(406).send("Misuse")     
+        // var search = id ? { id } : { username }      
+        const user = await User.findOne({username: username})
+        if (!user) return res.status(404).send("Not found.")        
+        res.send({
+            username: user.username,
+            photo: user.photo,
+            banner: user.banner,
+            id: user.id,
+            description: user.description,
+            followers: user.followers,
+            following: user.following
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ status: "error", msg: error.message });
+    }
+    
 }
 
 // Get specific posts
 export const getUserPosts = async (req, res) => {
-    const { user } = req.query
-
-    if (!user) return res.status(406).send("Misuse")
-    const posts = await Post.find({ user: user })
-
-    res.send(posts.reverse())
+    try {
+        const { user } = req.query      
+        if (!user) return res.status(406).send("Misuse")
+        const posts = await Post.find({ user: user })       
+        res.send(posts.reverse())
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json({ status: "error", msg: error.message });
+    }
 }
 
 // Create a post
@@ -195,13 +222,13 @@ export const updateUser = async (req, res) => {
     if (!user) return res.status(500).send("Err")
 
     user.description = description
-    user.name = name
+    user.username = username
 
     await user.save()
 
     res.send({
         description,
-        name
+        username
     })
 }
 

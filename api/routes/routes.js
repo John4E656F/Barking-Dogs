@@ -7,6 +7,7 @@ import {
     followManager,
     getHome,
     getUser,
+    getUserbyName,
     getUserPosts,
     login, 
     logintoken, 
@@ -25,6 +26,8 @@ router.get("/", (req, res) => res.send("just dev."))
 router.get("/home", getHome)
 
 router.get("/user", getUser)
+
+router.get("/username", getUserbyName)
 
 router.get("/userPosts", getUserPosts)
 

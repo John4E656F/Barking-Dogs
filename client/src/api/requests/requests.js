@@ -71,6 +71,23 @@ export const getUser = (data, responseCB, loadingCB) => {
             return null
         })
 }
+// Get user informations
+export const getUserbyUsername = (data, responseCB, loadingCB) => {
+    if (loadingCB) loadingCB(true)
+    return axios
+        .get(url.GET_USERNAME, {
+            params: data
+        })
+        .then(response => {
+            if (loadingCB) loadingCB(false)
+            if (responseCB) responseCB(response.data)
+            return response.data
+        })
+        .catch(err => {
+            if (loadingCB) loadingCB(false)
+            return null
+        })
+}
 
 // Get posts of specified user
 export const getPosts = (data, responseCB, loadingCB) => {
