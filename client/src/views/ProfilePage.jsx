@@ -7,7 +7,7 @@ import {
 } from '@mui/material'
 import Navbar from '../components/Navbar'
 import { getUserbyUsername, getPosts } from '../api/requests/requests';
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Compose from '../components/Compose'
 import Feed from '../components/Feed'
 import Loading from '../components/Loading'
@@ -46,7 +46,7 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    if (params.username == currentUser.username) {
+    if (params.username === currentUser.username) {
       setSelfMode(true)
       followersCallback(currentUser.followers)
       followingCallback(currentUser.following)

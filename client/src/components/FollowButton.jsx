@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../store/user";
-import axios from "../utils/axios";
 import { followUser } from '../api/requests/requests'
 import {
     Box,

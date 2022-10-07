@@ -4,7 +4,8 @@ import multer  from "multer"
 
 import { 
     createPost,
-    followManager,
+    follow,
+    unfollow,
     getHome,
     getUser,
     getUserbyName,
@@ -43,6 +44,8 @@ router.post("/upload", auth, upload.array('files'), uploadImages)
 
 router.post("/update", auth, updateUser)
 
-router.post("/follow", auth, followManager)
+router.post("/follow", auth, follow)
+
+router.post("/unfollow", auth unfollow)
 
 export default router

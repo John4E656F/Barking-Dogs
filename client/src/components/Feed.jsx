@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import axios from '../utils/axios'
 import { useNavigate, Link } from 'react-router-dom'
 // import FollowButton from './FollowButton'
 import { useSelector } from 'react-redux'
 import { getUser } from '../api/requests/requests'
 import Moment from "react-moment";
-import Default from '../assets/default.jpg'
+
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import ReplyIcon from '@mui/icons-material/Reply';
 import RepeatIcon from '@mui/icons-material/Repeat';
@@ -17,7 +16,6 @@ import {
   Container,
   Box,
   Button,
-  Grid,
   Avatar,
   Typography,
 } from '@mui/material'
