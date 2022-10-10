@@ -2,7 +2,9 @@
 
 # Barking-Dogs
 
-<img src="https://firebasestorage.googleapis.com/v0/b/bark-5b302.appspot.com/o/Bark%20Logo.png?alt=media&token=9a46d4a8-9c85-4db3-bc37-f3584cbb1deb" width="200px;" alt="BarkingDogs"/>
+<a href="https://barking-dogs.netlify.app/"><img src="https://firebasestorage.googleapis.com/v0/b/bark-5b302.appspot.com/o/Bark%20Logo.png?alt=media&token=9a46d4a8-9c85-4db3-bc37-f3584cbb1deb" width="200px;" alt="BarkingDogs"/></a>
+
+<button><a href="https://barking-dogs.netlify.app/">Check out the project</a></button>
 </div>
 <hr>
 
