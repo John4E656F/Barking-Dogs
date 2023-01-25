@@ -46,6 +46,6 @@ router.post("/update", auth, updateUser)
 
 router.post("/follow", auth, follow)
 
-router.post("/unfollow", auth unfollow)
+// router.post("/unfollow", auth unfollow)
 
 export default router
